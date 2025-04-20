@@ -1,0 +1,266 @@
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+  overflow-x: hidden;
+}
+
+#selectionPage {
+  background-color: #121212;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+
+#selectionPage .bg-white {
+  background-color: #1e1e1e;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  border: 1px solid #2a2a2a;
+}
+
+h1,
+label,
+strong {
+  color: #ffffff;
+}
+
+/* Custom Select Styling */
+.select-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.select-container select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  color: #e0e0e0;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.select-container::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #ff9500;
+  pointer-events: none;
+}
+
+.select-container select:focus {
+  border-color: #ff9500;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 149, 0, 0.3);
+}
+
+.select-container select:hover {
+  border-color: #ff9500;
+}
+
+/* Hide default dropdown arrow in IE */
+.select-container select::-ms-expand {
+  display: none;
+}
+
+input[type="text"] {
+  background-color: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  color: #e0e0e0;
+  transition: all 0.3s ease;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+input[type="text"]:focus {
+  border-color: #ff9500;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 149, 0, 0.3);
+}
+
+button {
+  background-color: #ff9500 !important;
+  color: #121212 !important;
+  font-weight: 600;
+  border: none;
+  transition: transform 0.2s ease, background-color 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(255, 149, 0, 0.2);
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ff9500 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 149, 0, 0.3);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+#chatPage {
+  position: relative;
+}
+
+#chatPage .bg-blue-600 {
+  background-color: #1e1e1e;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+#chatContainer {
+  background-color: #121212;
+  padding: 1.5rem;
+  height: calc(100vh - 130px);
+}
+
+/* Input area styling - making the area around text box dark */
+.flex.p-4.border-t {
+  background-color: #121212;
+  border-top: 1px solid #2a2a2a;
+}
+
+/* Make sure any potential white background is removed */
+.bg-white,
+.bg-gray-100 {
+  background-color: #121212 !important;
+}
+
+/* Ensure the chat input area has proper styling */
+#chatPage .flex.p-4.border-t {
+  background-color: #1e1e1e;
+  border-top: 1px solid #2a2a2a;
+  padding: 16px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.user-msg {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-left: auto;
+  max-width: 80%;
+  margin-bottom: 1rem;
+  border: 1px solid #3a3a3a;
+}
+
+.ai-msg {
+  background-color: #242424;
+  color: #e0e0e0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-right: auto;
+  max-width: 80%;
+  margin-bottom: 1rem;
+  border-left: 3px solid #ff9500;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #3a3a3a;
+  border-radius: 3px;
+  background-color: #2a2a2a;
+  vertical-align: middle;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #ff9500;
+  border-color: #ff9500;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23121212'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+  background-size: 12px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.flex {
+  display: flex;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.border-t {
+  border-top: 1px solid #2a2a2a;
+}
+
+.rounded {
+  border-radius: 8px;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+/* Subtle scrollbar for chat container */
+#chatContainer::-webkit-scrollbar {
+  width: 6px;
+}
+
+#chatContainer::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+#chatContainer::-webkit-scrollbar-thumb {
+  background-color: #3a3a3a;
+  border-radius: 6px;
+}
+
+#chatContainer::-webkit-scrollbar-thumb:hover {
+  background-color: #4a4a4a;
+}
+
+/* Animation for messages */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.user-msg,
+.ai-msg {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* Input placeholder color */
+::placeholder {
+  color: #777777;
+}
+
+/* Hidden class */
+.hidden {
+  display: none !important;
+}
