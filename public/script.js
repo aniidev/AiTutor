@@ -64,13 +64,16 @@ window.sendMessage = async function () {
   userInput.value = "";
 
   const isStepByStep = stepToggle.checked;
-  const fullPrompt = `Subject: ${subject}\nLevel: ${level}\nStep-by-step: ${isStepByStep}\nQuestion: ${prompt}`;
+  const fullPrompt = `You're answering for a ${level}-level student.\nSubject: ${subject}\nStep-by-step: ${isStepByStep}\nQuestion: ${prompt}`;
 
   try {
     const res = await fetch("/api/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: fullPrompt })
+      body: JSON.stringify({
+        prompt: fullPrompt,
+        ageLevel: level
+      })
     });
 
     const data = await res.json();
@@ -80,7 +83,6 @@ window.sendMessage = async function () {
     appendMessage("ai", "Something went wrong. Please try again.");
   }
 };
-
 // Append message to chat
 function appendMessage(role, content) {
   const msg = document.createElement("div");
