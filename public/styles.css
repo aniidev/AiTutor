@@ -3,10 +3,15 @@ body {
   background-color: #121212;
   color: #e0e0e0;
   overflow-x: hidden;
+
 }
 
 #selectionPage {
   background-color: #121212;
+  background-image:
+    linear-gradient(rgba(30, 30, 30, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 30, 30, 0.3) 1px, transparent 1px);
+  background-size: 20px 20px;
   position: fixed;
   top: 0;
   left: 0;
@@ -78,6 +83,7 @@ strong {
   display: none;
 }
 
+
 input[type="text"] {
   background-color: #2a2a2a;
   border: 1px solid #3a3a3a;
@@ -121,11 +127,14 @@ button:active {
 
 #chatPage .bg-blue-600 {
   background-color: #1e1e1e;
+
   border-bottom: 1px solid #2a2a2a;
 }
 
 #chatContainer {
   background-color: #121212;
+  background-image: radial-gradient(rgba(80, 80, 80, 0.15) 2px, transparent 2px);
+  background-size: 34px 34px;
   padding: 1.5rem;
   height: calc(100vh - 130px);
 }
@@ -263,4 +272,106 @@ input[type="checkbox"]:checked {
 /* Hidden class */
 .hidden {
   display: none !important;
+}
+
+.custom-dropdown {
+  position: relative;
+  font-size: 16px;
+}
+
+.dropdown-toggle {
+  padding: 12px 16px;
+  background: rgba(42, 42, 42, 0.6);
+  color: #e0e0e0;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  position: relative;
+}
+
+.dropdown-toggle::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #ff9500;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: calc(100% + 6px);
+  width: 100%;
+  background: rgba(42, 42, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  z-index: 10;
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-options li {
+  padding: 10px 16px;
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dropdown-options li:hover {
+  background-color: #333333;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@keyframes pulse-orange {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 165, 0, 0.5);
+  }
+
+  70% {
+    box-shadow: 0 0 0 6px rgba(255, 165, 0, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 165, 0, 0);
+  }
+}
+
+.dropdown-toggle.pulse {
+  animation: pulse-orange 1.5s infinite;
+  border-color: orange;
+}
+
+@keyframes gradient-x {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-x {
+  background: linear-gradient(270deg, #ff9500, hsl(42, 100%, 50%)), #ff8000;
+  background-size: 600% 600%;
+  animation: gradient-x 3s ease infinite;
+}
+
+#startLearningBtn {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  top: 10px;
 }

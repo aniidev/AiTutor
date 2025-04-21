@@ -14,30 +14,36 @@
       <h1 class="text-2xl font-bold mb-6 text-center">Welcome to Tutor AI</h1>
       
       <label class="block mb-2 font-semibold">Select a Subject:</label>
-      <div class="select-container">
-        <select id="subject" class="w-full p-2 border rounded mb-4">
+      <div class="input-container">
+        <input type="text" id="subject" class="w-full p-2 border rounded mb-4" placeholder="Type...">
+        <!-- <select id="subject" class="w-full p-2 border rounded mb-4">
           <option value="">-- Select Subject --</option>
           <option value="Math">Math</option>
           <option value="Science">Science</option>
           <option value="History">History</option>
           <option value="Computer Science">Computer Science</option>
-        </select>
+        </select> -->
       </div>
-      
+      <input type="hidden" id="level" name="level">
       <label class="block mb-2 font-semibold">Select Learning Level:</label>
       <div class="select-container">
-        <select id="level" class="w-full p-2 border rounded mb-6">
-          <option value="">-- Select Level --</option>
-          <option value="Kid">Kid</option>
-          <option value="Middle School">Middle School</option>
-          <option value="High School">High School</option>
-          <option value="University">University</option>
-        </select>
+        <div class="custom-dropdown select-container mb-6">
+  <div id="dropdownToggle" class="dropdown-toggle" >Select Level</div>
+  <ul id="dropdownOptions" class="dropdown-options hidden">
+    <li data-value="Kid">Kid</li>
+    <li data-value="Middle School">Middle School</li>
+    <li data-value="High School">High School</li>
+    <li data-value="University">University</li>
+  </ul>
+</div>
       </div>
       
-      <button id="startLearningBtn" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition">
-        Start Learning
-      </button>
+      <button
+  id="startLearningBtn"
+  class="relative overflow-hidden px-6 py-3 font-semibold text-white rounded-xl shadow-lg transition-all duration-300 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 animate-gradient-x"
+>
+  Start Learning
+</button>
     </div>
   </div>
   
