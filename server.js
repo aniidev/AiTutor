@@ -1,13 +1,17 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import { Groq } from "groq-sdk";
 import path from "path";
 import { fileURLToPath } from "url";
 import crypto from "crypto";
-
-dotenv.config();
+import session from "express-session";
+import passport from "passport";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import './google.js';
 
 const app = express();
 const port = 3000;
@@ -21,15 +25,53 @@ const sessions = new Map(); // Stores chat histories
 
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'default_secret',
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: "/auth/google/callback"
+}, (accessToken, refreshToken, profile, done) => {
+  return done(null, profile);
+}));
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+
+app.get("/auth/google/callback", passport.authenticate("google", {
+  failureRedirect: "/"
+}), (req, res) => {
+  res.redirect("/index.html");
+});
+
+app.get("/logout", (req, res) => {
+  req.logout(() => {
+    res.redirect("/");
+  });
 });
 
 const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
 });
 
-// Helper function for system prompts
 function getSystemPrompt(ageLevel) {
   switch (ageLevel) {
     case "kid":
@@ -41,7 +83,7 @@ Use lots of emojis to help make it exciting and clear ✨.
 Keep answers short and joyful — like talking to a kindergartener 🧒.
 Use HTML tags like <p>, <ul>, and <strong> to make things neat.
 Never use markdown or big words. No boring stuff!
-No polite phrases like "I'm happy to help" or "Of course" — just jump into the fun!`; // Keep original kid prompt
+No polite phrases like "I'm happy to help" or "Of course" — just jump into the fun!`;
     case "middle_school":
       return `Dont do an introduction. You're a patient tutor for middle school students.
 Use analogies and relatable examples from daily life.
@@ -79,7 +121,6 @@ app.post("/api/ask", async (req, res) => {
   const { prompt, ageLevel, sessionId } = req.body;
   if (!prompt || !sessionId) return res.status(400).json({ error: "Invalid request" });
 
-  // Initialize or retrieve session
   if (!sessions.has(sessionId)) {
     sessions.set(sessionId, {
       history: [{
@@ -92,25 +133,17 @@ app.post("/api/ask", async (req, res) => {
 
   const session = sessions.get(sessionId);
   session.lastActive = Date.now();
-
-  // Add user message to history
   session.history.push({ role: "user", content: prompt });
 
   try {
-    // Get AI response
     const response = await groq.chat.completions.create({
       messages: session.history,
       model: "llama3-8b-8192"
     });
 
     const answer = response.choices[0]?.message?.content || "No response.";
-
-    // Add AI response to history
     session.history.push({ role: "assistant", content: answer });
-
-    // Cleanup old sessions (30min inactivity)
     cleanupSessions();
-
     res.json({ answer });
   } catch (err) {
     console.error("Groq API Error:", err);

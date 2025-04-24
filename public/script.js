@@ -1,4 +1,3 @@
-// Page elements
 const selectionPage = document.getElementById("selectionPage");
 const chatPage = document.getElementById("chatPage");
 const subjectSelect = document.getElementById("subject");
@@ -10,6 +9,7 @@ const selectedSubject = document.getElementById("selectedSubject");
 const selectedLevel = document.getElementById("selectedLevel");
 const stepToggle = document.getElementById("stepToggle");
 const startLearningBtn = document.getElementById("startLearningBtn");
+
 
 // Store selected options
 let subject = "";
@@ -133,3 +133,16 @@ subjectSelect.addEventListener("change", function () {
     this.style.border = "1px solid #3a3a3a";
   }
 });
+
+//google auth
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function (req, res) {
+    //redirect wherever you want:
+    res.redirect('/public/index.html');
+  }
+);
