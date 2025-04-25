@@ -382,3 +382,26 @@ input[type="checkbox"]:checked {
   right: 20px;
   z-index: 1000;
 }
+
+#chatContainer {
+      height: calc(100vh - 180px) !important; 
+      margin-bottom: 100px;
+    }
+    
+    #chat-options {
+      position: fixed;
+      bottom: 66px; 
+      width: 100%;
+      z-index: 20;
+      border-top: none !important;
+    }
+    
+    #chatPage .flex.p-4.border-t {
+      background-color: #1e1e1e;
+      border-top: 1px solid #2a2a2a;
+      padding: 16px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 10;
+    }

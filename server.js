@@ -13,6 +13,8 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import './google.js';
 
+import { GetListByKeyword } from "youtube-search-api";
+
 const app = express();
 const port = 3000;
 
@@ -116,6 +118,16 @@ Format answers using HTML tags like <p>, <ul>, and <strong>.
 Avoid markdown, filler phrases, and long paragraphs "Use LaTeX syntax for any math formulas, and wrap them in double dollar signs $$ like this: $$a^2 + b^2 = c^2$$..`;
   }
 }
+async function getYouTubeVideoUrl(query) {
+  try {
+    const results = await GetListByKeyword(query, false, 1);
+    const videoId = results.items?.[0]?.id;
+    return videoId ? `https://www.youtube.com/watch?v=${videoId}` : null;
+  } catch (err) {
+    console.error("YouTube Search Error:", err);
+    return null;
+  }
+}
 
 app.post("/api/ask", async (req, res) => {
   const { prompt, ageLevel, sessionId } = req.body;
@@ -144,12 +156,14 @@ app.post("/api/ask", async (req, res) => {
     const answer = response.choices[0]?.message?.content || "No response.";
     session.history.push({ role: "assistant", content: answer });
     cleanupSessions();
-    res.json({ answer });
+    const videoUrl = await getYouTubeVideoUrl(prompt);
+    res.json({ answer, videoUrl });
   } catch (err) {
     console.error("Groq API Error:", err);
     res.status(500).json({ error: "AI request failed." });
   }
 });
+
 
 function cleanupSessions() {
   const now = Date.now();

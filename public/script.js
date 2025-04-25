@@ -86,7 +86,8 @@ window.sendMessage = async function () {
   appendMessage("user", prompt);
   userInput.value = "";
 
-  const isStepByStep = stepToggle.checked;
+  const isStepByStep = document.getElementById("stepToggle").checked;
+  const showYoutube = document.getElementById("ytToggle").checked;
   const fullPrompt = `Subject: ${subject}\nStep-by-step: ${isStepByStep}\nQuestion: ${prompt}`;
 
   try {
@@ -96,12 +97,31 @@ window.sendMessage = async function () {
       body: JSON.stringify({
         prompt: fullPrompt,
         ageLevel: level,
-        sessionId // Send session ID with request
+        sessionId,
+        showYoutube // Pass to backend
       })
     });
 
     const data = await res.json();
+
     appendMessage("ai", data.answer || "No answer received.");
+
+    if (showYoutube && data.videoUrl) {
+      const videoEmbed = document.createElement("iframe");
+      videoEmbed.width = "560";
+      videoEmbed.height = "315";
+      videoEmbed.className = "rounded-2xl shadow-md w-full max-w-xl my-4";
+      videoEmbed.src = data.videoUrl.replace("watch?v=", "embed/");
+      videoEmbed.title = "YouTube video";
+      videoEmbed.frameBorder = "0";
+      videoEmbed.allow =
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      videoEmbed.allowFullscreen = true;
+
+      chatContainer.appendChild(videoEmbed);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
   } catch (err) {
     console.error("Error:", err);
     appendMessage("ai", "Something went wrong. Please try again.");
@@ -142,7 +162,7 @@ app.get('/auth/google',
 app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function (req, res) {
-    //redirect wherever you want:
+    //set this up later
     res.redirect('/public/index.html');
   }
 );
