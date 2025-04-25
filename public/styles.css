@@ -405,3 +405,97 @@ input[type="checkbox"]:checked {
       width: 100%;
       z-index: 10;
     }
+
+    #chatContainer {
+      height: calc(100vh - 180px) !important; 
+      margin-bottom: 120px; 
+    }
+    
+
+    .input-area-container {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #1e1e1e;
+      border-top: 1px solid #2a2a2a;
+      padding: 16px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .input-wrapper {
+      width: 100%;
+      display: flex;
+      gap: 10px;
+    }
+    
+
+    #chat-options {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+    
+    .toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #2a2a2a !important;
+  border: 1px solid #3a3a3a;
+  border-radius: 20px;
+  padding: 6px 12px;
+  color: #a0a0a0;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #d0d0d0 !important;
+}
+}
+.toggle-btn:focus {
+  outline: none;
+  box-shadow: none;
+  transform: scale(1);
+}
+
+.toggle-btn:active {
+  transform: scale(1);
+}
+
+.toggle-btn:hover {
+  background-color: #333333;
+   color:  #333333 !important;
+}
+
+.toggle-btn.active {
+  background-color:  #ff9500  !important;
+  
+  color:  #333333 !important;
+}
+
+.toggle-btn i {
+  font-size: 16px;
+}
+    
+
+    #userInput {
+      background-color: 
+      border: 1px solid #3a3a3a;
+      border-radius: 20px;
+      padding: 10px 16px;
+      color: #e0e0e0;
+      font-size: 16px;
+      width: 100%;
+    }
+    
+    #sendMessageBtn {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }

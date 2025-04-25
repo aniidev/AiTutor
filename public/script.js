@@ -9,12 +9,18 @@ const selectedSubject = document.getElementById("selectedSubject");
 const selectedLevel = document.getElementById("selectedLevel");
 const stepToggle = document.getElementById("stepToggle");
 const startLearningBtn = document.getElementById("startLearningBtn");
-
+const videoToggle = document.getElementById("ytToggleBtn");
 
 // Store selected options
 let subject = "";
 let level = "";
 let sessionId = null; // Added session tracking
+let video = false;
+
+videoToggle.addEventListener("click", (e) => {
+  video = !video;
+  videoToggle.classList.toggle('active');
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   if (startLearningBtn) {
@@ -86,8 +92,8 @@ window.sendMessage = async function () {
   appendMessage("user", prompt);
   userInput.value = "";
 
-  const isStepByStep = document.getElementById("stepToggle").checked;
-  const showYoutube = document.getElementById("ytToggle").checked;
+  const isStepByStep = false;
+  const showYoutube = video;
   const fullPrompt = `Subject: ${subject}\nStep-by-step: ${isStepByStep}\nQuestion: ${prompt}`;
 
   try {
