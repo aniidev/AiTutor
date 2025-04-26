@@ -382,6 +382,12 @@ input[type="checkbox"]:checked {
   right: 20px;
   z-index: 1000;
 }
+.top-left {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
 
 #chatContainer {
       height: calc(100vh - 180px) !important; 
@@ -439,6 +445,7 @@ input[type="checkbox"]:checked {
     }
     
     .toggle-btn {
+      box-shadow: none !important;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -450,7 +457,7 @@ input[type="checkbox"]:checked {
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: #d0d0d0 !important;
+  color: #6b6a6a !important;
 }
 
 .toggle-btn:focus {
@@ -464,14 +471,14 @@ input[type="checkbox"]:checked {
 }
 
 .toggle-btn:hover {
-  background-color: #333333;
-   color:  #333333 !important;
+  background-color: #333333 !important;
+   color:  #ff9500 !important;
 }
 
 .toggle-btn.active {
-  background-color:  #ff9500  !important;
-  
-  color:  #333333 !important;
+  background-color:  #333333  !important;
+  border: 1px solid #ff9500 !important;
+  color:  #ff9500 !important;
 }
 
 .toggle-btn i {
