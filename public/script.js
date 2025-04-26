@@ -104,13 +104,17 @@ window.sendMessage = async function () {
         prompt: fullPrompt,
         ageLevel: level,
         sessionId,
-        showYoutube // Pass to backend
+        showYoutube
       })
     });
 
     const data = await res.json();
 
-    appendMessage("ai", data.answer || "No answer received.");
+    if (!data.answer) {
+      appendMessage("ai", "No answer received.");
+    } else {
+      appendMessage("ai", data.answer);
+    }
 
     if (showYoutube && data.videoUrl) {
       const videoEmbed = document.createElement("iframe");
@@ -134,18 +138,65 @@ window.sendMessage = async function () {
   }
 };
 
+
 function appendMessage(role, content) {
   const msg = document.createElement("div");
   msg.className = role === "user" ? "user-msg" : "ai-msg";
-  msg.innerHTML = `<strong>${role === "user" ? "You" : "Tutor"}:</strong> ${content}`;
+
+  // Handle code blocks
+  const codeBlockRegex = /```(?:\w+)?\s*([\s\S]*?)```/g;
+const formattedContent = content.replace(codeBlockRegex, (match, code) => {
+  const escapedCode = escapeHtml(code.trim());
+  return `
+    <div class="relative my-4">
+      <button class="copy-btn absolute top-2 right-2 bg-gray-700 text-white text-xs px-2 py-1 rounded hover:bg-gray-600">Copy</button>
+      <pre class="bg-[#2d2d2d] text-white p-4 rounded-md overflow-x-auto">
+        <code>${escapedCode.trim()}</code>
+      </pre>
+    </div>
+  `;
+});
+
+  msg.innerHTML = `<strong>${role === "user" ? "You" : "Tutor"}:</strong> ${formattedContent}`;
+  msg.innerHTML.trim();
   chatContainer.appendChild(msg);
   chatContainer.scrollTop = chatContainer.scrollHeight;
 
-  //Re-render LaTeX
+  // Re-render LaTeX
   if (window.MathJax) {
     MathJax.typesetPromise([msg]);
   }
+
+  // Add copy functionality
+  msg.querySelectorAll('.copy-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const code = button.nextElementSibling.querySelector('code').innerText;
+      navigator.clipboard.writeText(code)
+        .then(() => {
+          button.textContent = "Copied!";
+          setTimeout(() => (button.textContent = "Copy"), 1500);
+        })
+        .catch(err => {
+          console.error("Failed to copy:", err);
+          button.textContent = "Error";
+        });
+    });
+  });
 }
+
+
+
+function escapeHtml(text) {
+  const map = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  };
+  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
 
 userInput.addEventListener("keydown", function (event) {
   if (event.key === "Enter") {
