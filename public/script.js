@@ -10,16 +10,23 @@ const selectedLevel = document.getElementById("selectedLevel");
 const stepToggle = document.getElementById("stepToggle");
 const startLearningBtn = document.getElementById("startLearningBtn");
 const videoToggle = document.getElementById("ytToggleBtn");
+const simulateToggle = document.getElementById("simulateBtn");
 
-// Store selected options
+
 let subject = "";
 let level = "";
-let sessionId = null; // Added session tracking
+let sessionId = null; // Session tracking
 let video = false;
+let simulate = false;
 
 videoToggle.addEventListener("click", (e) => {
   video = !video;
   videoToggle.classList.toggle('active');
+});
+
+simulateToggle.addEventListener("click", (e) => {
+  simulate = !simulate;
+  simulateToggle.classList.toggle('active');
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -52,9 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  if (startLearningBtn) {
-    startLearningBtn.addEventListener("click", startLearning);
-  }
 });
 
 function startLearning() {
@@ -94,6 +98,7 @@ window.sendMessage = async function () {
 
   const isStepByStep = false;
   const showYoutube = video;
+  const makeSim = simulate;
   const fullPrompt = `Subject: ${subject}\nStep-by-step: ${isStepByStep}\nQuestion: ${prompt}`;
 
   try {
@@ -104,7 +109,8 @@ window.sendMessage = async function () {
         prompt: fullPrompt,
         ageLevel: level,
         sessionId,
-        showYoutube
+        showYoutube,
+        makeSim
       })
     });
 
@@ -131,6 +137,32 @@ window.sendMessage = async function () {
       chatContainer.appendChild(videoEmbed);
       chatContainer.scrollTop = chatContainer.scrollHeight;
     }
+    if (makeSim && data.p5Sketch) {
+      const p5Frame = document.createElement("iframe");
+    
+      const blob = new Blob([
+        `<html>
+          <head>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+          </head>
+          <body style="margin:0;">
+            <script>
+              ${data.p5Sketch}
+            </script>
+          </body>
+        </html>`
+      ], { type: "text/html" });
+    
+      p5Frame.src = URL.createObjectURL(blob);
+      p5Frame.width = "100%";
+      p5Frame.height = "400";
+      p5Frame.className = "rounded-xl shadow mt-4";
+      p5Frame.style.border = "none";
+    
+      chatContainer.appendChild(p5Frame);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
 
   } catch (err) {
     console.error("Error:", err);
@@ -204,6 +236,7 @@ userInput.addEventListener("keydown", function (event) {
     sendMessage();
   }
 });
+
 
 subjectSelect.addEventListener("change", function () {
   if (this.value) {

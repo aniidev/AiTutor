@@ -130,7 +130,7 @@ async function getYouTubeVideoUrl(query) {
 }
 
 app.post("/api/ask", async (req, res) => {
-  const { prompt, ageLevel, sessionId } = req.body;
+  const { prompt, ageLevel, sessionId, makeSim } = req.body;
   if (!prompt || !sessionId) return res.status(400).json({ error: "Invalid request" });
 
   if (!sessions.has(sessionId)) {
@@ -146,18 +146,42 @@ app.post("/api/ask", async (req, res) => {
   const session = sessions.get(sessionId);
   session.lastActive = Date.now();
   session.history.push({ role: "user", content: prompt });
-
+    
   try {
+
+
     const response = await groq.chat.completions.create({
       messages: session.history,
       model: "llama3-8b-8192"
     });
-
+ 
     const answer = response.choices[0]?.message?.content || "No response.";
+    
     session.history.push({ role: "assistant", content: answer });
+    let p5Sketch = null;
+
+    if (makeSim) {
+      try {
+        const sketchResponse = await groq.chat.completions.create({
+          messages: [
+            { role: "system", content: "Generate a standalone p5.js using setup() {}, draw(){} that is 400x400 sketch and add a replay button when necessary. Use equations. make the objects in the sketch visible and understandable whaet they are. use background(35) make the objects white or gray and have noStroke(). Now, create a simulation of: [your topic here]" },
+            { role: "user", content: `Create a p5.js simulation that visually demonstrates this problem make it simple but working:\n\n"${prompt}"` }
+          ],
+          model: "llama3-8b-8192"
+        });
+        p5Sketch = sketchResponse.choices[0]?.message?.content || null;
+
+        // Clean code if it's in a code block
+        const match = p5Sketch.match(/```(?:javascript|js)?\s*([\s\S]*?)```/i);
+        if (match) p5Sketch = match[1];
+      } catch (err) {
+        console.error("Sketch generation failed:", err);
+      }
+}
     cleanupSessions();
     const videoUrl = await getYouTubeVideoUrl(prompt);
-    res.json({ answer, videoUrl });
+    res.json({ answer, videoUrl, p5Sketch });
+    
   } catch (err) {
     console.error("Groq API Error:", err);
     res.status(500).json({ error: "AI request failed." });
