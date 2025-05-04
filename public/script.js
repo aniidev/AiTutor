@@ -152,10 +152,10 @@ window.sendMessage = async function () {
           </body>
         </html>`
       ], { type: "text/html" });
-    
+      console.log(data.p5Sketch);
       p5Frame.src = URL.createObjectURL(blob);
       p5Frame.width = "100%";
-      p5Frame.height = "400";
+      p5Frame.height = "100%";
       p5Frame.className = "rounded-xl shadow mt-4";
       p5Frame.style.border = "none";
     

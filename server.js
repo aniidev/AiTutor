@@ -164,8 +164,54 @@ app.post("/api/ask", async (req, res) => {
       try {
         const sketchResponse = await groq.chat.completions.create({
           messages: [
-            { role: "system", content: "Generate a standalone p5.js using setup() {}, draw(){} that is 400x400 sketch and add a replay button when necessary. Use equations. make the objects in the sketch visible and understandable whaet they are. use background(35) make the objects white or gray and have noStroke(). Now, create a simulation of: [your topic here]" },
-            { role: "user", content: `Create a p5.js simulation that visually demonstrates this problem make it simple but working:\n\n"${prompt}"` }
+            {
+              role: "system",
+              content: `You are an expert p5.js developer. Generate complete and clean 400x400 p5.js simulations using setup() and draw(). Your code must work without errors in the p5.js web editor. Do not include HTML or explanations. Always define variables. Keep the Circle class, background(35), and replay button intact. Animations should be smooth and visually intuitive.`
+            },
+            {
+              role: "user",
+              content: ` Create a p5.js simulation that visually demonstrates the following concept:\n\n"${prompt}"\n\n Here is the code structure you MUST follow:
+        
+        // Base sketch structure - only add logic
+        let circleObj;
+        function setup() {
+          // circleObj must be initialized here
+          circleObj = new Circle(200, 200, 20);
+          createCanvas(400, 400);
+          replayButton = createButton('Replay'); // keep this
+          replayButton.position(10, 10);
+          replayButton.mousePressed(reset); // fix this reference
+        }
+        
+        function draw() {
+          background(35); // keep this
+          circleObj.display();
+          // Add simulation logic here
+        }
+        
+        function reset() {
+          // Add logic to reset state here
+        }
+        
+        class Circle {
+          constructor(x, y, r) {
+            this.x = x;
+            this.y = y;
+            this.r = r;
+            // Add more properties as needed
+          }
+        
+          display() {
+            fill(255);
+            noStroke();
+            ellipse(this.x, this.y, this.r * 2);
+          }
+        
+          // Add other behavior methods here
+        }
+        
+        // Add any necessary global variables
+        DO NOT HAVE ANY INTRODUCTIONS OR ANYTHING DO NOT SAY HERE IS THE CODE JUST ONLY OUTPUT THE CODE NO EXTRA SYMBOLS OR CODE FENCES (NO \`\`\` or \`\`\`javascript )OR ANYTHING ONLY P5.js code ` }
           ],
           model: "llama3-8b-8192"
         });
